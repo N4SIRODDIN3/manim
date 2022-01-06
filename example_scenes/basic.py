@@ -12,7 +12,7 @@ from manim import *
 # Use -n <number> to skip ahead to the nth animation of a scene.
 # Use -r <number> to specify a resolution (for example, -r 1920,1080
 # for a 1920x1080 video)
-# Edited from ABODE app
+# Edited from ACODE app
 
 
 class OpeningManim(Scene):
