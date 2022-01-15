@@ -25,6 +25,7 @@ class Intro(Scene):
         self.wait(0.4)
         self.play(ReplacementTransform(bg, title), FadeOut(intro), rate_func = linear)
         self.wait()
+        
 
     
         lecture_component = make_component("Lecture")
@@ -46,5 +47,9 @@ class Intro(Scene):
         for component in first_encounter_components:
             self.play(Create(component[0]), Write(component[1]))
             self.wait()
-    
+            self.play(
+                component.animate.shift(LEFT*5)
+            )
+            self.wait(0.4)
+        
     
