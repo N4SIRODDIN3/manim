@@ -13,7 +13,7 @@ class Intro(Scene):
         bg = Rectangle(fill_opacity=1, fill_color=BLACK,
                         stroke_color='#ff073a').round_corners(0.8)
         bg.to_corner(UL, buff=0)
-        title = Title("Shear walls explained").to_edge(UP*3)
+        title = Title("Shear walls explained").to_edge(UP, buff=0.2)
         # bg.add_updater(lambda mobj: mobj.round_corners().surround(intro))
         def update_function(mobj):
             mobj.move_to(bg.get_center())
@@ -26,8 +26,6 @@ class Intro(Scene):
         self.play(ReplacementTransform(bg, title), FadeOut(intro), rate_func = linear)
         self.wait()
         
-
-    
         lecture_component = make_component("Lecture")
         examples_component = make_component("Examples", color=ORANGE)
         homework_component = make_component("Homework", color=RED)
@@ -47,9 +45,11 @@ class Intro(Scene):
         for component in first_encounter_components:
             self.play(Create(component[0]), Write(component[1]))
             self.wait()
-            self.play(
-                component.animate.shift(LEFT*5)
+        self.play(
+                LaggedStart(
+                    *[component.animate.shift(LEFT*5) for component in first_encounter_components], lag_ratio = 0.5
+                )
             )
-            self.wait(0.4)
-        
-    
+        self.wait(0.4)
+        self.play(first_encounter_components[1:].animate.set_opacity(0.3))
+        self.wait(0.4)
