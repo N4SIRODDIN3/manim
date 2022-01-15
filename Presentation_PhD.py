@@ -6,7 +6,7 @@ def make_component(text, color=YELLOW, scale=0.7):
         rect = Rectangle(color=color, height=1.1, width=2.3)
         return VGroup(rect, text_mob)
         
-class Intro(Scene):
+class Intro(MovingCameraScene):
     def construct(self):
         plan = NumberPlane()
         intro = Text(r"Introduction", stroke_width=0.3, color="#189651")
@@ -53,3 +53,12 @@ class Intro(Scene):
         self.wait(0.4)
         self.play(first_encounter_components[1:].animate.set_opacity(0.3))
         self.wait(0.4)
+
+class ChangingCameraWidthAndRestore(MovingCameraScene):
+    def construct(self):
+        text = Text("Hello World").set_color(BLUE)
+        self.add(text)
+        self.camera.frame.save_state()
+        self.play(self.camera.frame.animate.set(width=text.width * 1.2))
+        self.wait(0.3)
+        self.play(Restore(self.camera.frame))
