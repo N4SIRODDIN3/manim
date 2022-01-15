@@ -25,7 +25,7 @@ class Updater_Demo(Scene):
         NP = NumberPlane(
             x_range=range(-4.01,4.01), y_range=range(-4.01,4.01), axis_config={'stroke_with': 5}, background_line_style={'stroke_color':TEAL, 'stroke_width':3, 'stroke_opacity': 0.6},
         )
-        (RedGear, BlueGear) = SVGMobject(f"{HOME}\\Gears.svg")
+        (RedGear, BlueGear) = SVGMobject("C:/Manim_3_feb/manim_ce/updaters_gear_train/Gears.svg")
         BlueGear.scale(2).center()
 
         fps = 60
