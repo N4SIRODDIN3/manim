@@ -25,6 +25,11 @@ class Intro(MovingCameraScene):
         self.wait(0.4)
         self.play(ReplacementTransform(bg, title), FadeOut(intro), rate_func = linear)
         self.wait()
+        # Moving the camera:
+        self.camera.frame.save_state()
+        self.play(self.camera.frame.animate.set(width=title.width * 1.2))
+        self.wait(0.3)
+        self.play(Restore(self.camera.frame))
         
         lecture_component = make_component("Lecture")
         examples_component = make_component("Examples", color=ORANGE)
@@ -45,11 +50,7 @@ class Intro(MovingCameraScene):
         for component in first_encounter_components:
             self.play(Create(component[0]), Write(component[1]))
             self.wait()
-        self.play(
-                LaggedStart(
-                    *[component.animate.shift(LEFT*5) for component in first_encounter_components], lag_ratio = 0.5
-                )
-            )
+        self.play(AnimationGroup(*[component.animate.shift(LEFT*5) for component in first_encounter_components], lag_ratio=0.05))
         self.wait(0.4)
         self.play(first_encounter_components[1:].animate.set_opacity(0.3))
         self.wait(0.4)
@@ -62,3 +63,4 @@ class ChangingCameraWidthAndRestore(MovingCameraScene):
         self.play(self.camera.frame.animate.set(width=text.width * 1.2))
         self.wait(0.3)
         self.play(Restore(self.camera.frame))
+        
