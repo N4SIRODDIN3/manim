@@ -63,4 +63,164 @@ class ChangingCameraWidthAndRestore(MovingCameraScene):
         self.play(self.camera.frame.animate.set(width=text.width * 1.2))
         self.wait(0.3)
         self.play(Restore(self.camera.frame))
-        
+        np.arange(-10, 10.01, 2),
+    
+
+class JustifyText(Scene):
+            def construct(self):
+            
+                intro_title = Title("Introduction")
+                self.add(intro_title)
+                
+                Int_1 = (
+                    "\tIn high-seismicity countries, buildings must be designed to resist" # from In to resist is max char
+                    " seismic loading. It’s well know that RC shear walls represent a structurally" # smartly stoped at efficient
+                    " efficient system to stiffen an RC building under those loads."
+                )
+                Int_2 = (
+                    "\tIn general, a shear wall system consists of a combination of shear walls and frames" 
+                    " because this type of systems normally provide the required stiffness and strength" 
+                    " to withstand lateral loads in medium-high and even low rise buildings."
+                )
+                
+                intro_1 = MarkupText(Int_1,
+                     font_size=60, 
+                     unpack_groups=0, 
+                     font='LM Roman 12', 
+                     line_spacing=1.8, 
+                     disable_ligatures=1,
+                     justify=1 # : that is only available in MarkupText
+                ).scale(0.4).next_to(intro_title, DOWN, buff=0.5)
+                
+                intro_2 = MarkupText(Int_2,
+                     font_size=60, 
+                     unpack_groups=0, 
+                     font='LM Roman 12', 
+                     line_spacing=1.8, 
+                     disable_ligatures=1,
+                     justify=1 # : that is only available in MarkupText
+                ).scale(0.4).next_to(intro_1, DOWN)
+                
+                
+                self.play(LaggedStart(
+                    Write(intro_1), Write(intro_2), lag_ratio=1
+                    ),run_time=2,
+                )
+                self.wait(0.4)
+                
+                self.play(
+                    Create(SurroundingRectangle(intro_2[1][0:10], color=RED)), 
+                    Create(SurroundingRectangle(intro_2[1][13:19]), color=RED), # 's' of frames is included 
+                    run_time=2,
+                    rate_func=there_and_back_with_pause
+                )
+                # 
+                self.wait(0.4)
+                
+                shw = intro_2[1][0:10].copy()
+                fr = intro_2[1][13:19].copy()
+                self.play(
+                    shw.animate.to_edge(UR, buff=1.5),
+                    fr.animate.next_to(intro_title, DOWN),
+                    Unwrite(intro_2),Unwrite(intro_1),
+                    run_time=4,
+                )
+                self.wait(1)
+                
+                self.play(Indicate(fr, 3), shw.animate.set_opacity(0.2))
+                self.wait(0.5)
+                
+                frame_definition = MarkupText(
+                "A frame is an inter-\nconnection between \nvertical columns and \nhorizontal beams that \n" 
+                "bends predominantly \nin a shear mode deformation.",
+                     font_size=60,
+                     font='LM Roman 12',
+                     justify=1
+                ).scale(0.4).align_on_border(LEFT)
+                
+                
+                L_column = Line().set_style(stroke_width=10).rotate(PI*0.5)
+                R_column = L_column.copy().shift(RIGHT*3)
+                roof = always_redraw(lambda:Line(start=L_column.get_end(),end=R_column.get_end()))
+                load = always_redraw(lambda:
+                    Arrow(start=roof.get_start()-[1,0,0],end=roof.get_start(), buff=0)
+                )
+                shearwall = Rectangle(fill_color=BLUE, fill_opacity=1, height= L_column.get_length(), width=roof.get_length()*0.6)
+                shearwall.set_color_by_gradient(GREY_C).scale(0.6)
+                frame = VGroup(L_column, R_column, roof, load).scale(0.6) # , shearwall
+                # frames = frame.copy()
+                storey_4 = always_redraw(lambda:
+                    VGroup(*[frame.copy() for _ in range(4)]).arrange(UP, buff=-0.1).next_to(fr, DOWN, buff=0.4) # Force buffer to be 0 even in the presence of arrow tips.
+                )
+                
+                
+                # storey_4[0].add(fix1,fix1) # just put them inside ( , ), not in a list like that []
+
+                loads = VGroup()
+                for element in storey_4:
+                    if element==storey_4[0]:
+                        self.play(Create(element[:-1]), Write(frame_definition), run_time=3) # shear walls and loads are not included (-1, -2)
+                        # here add support for the first storey
+                    else:
+                        self.play(Create(element[:-1]))
+                    loads.add(element[3])
+                   # shearwalls.add(element[4])
+                self.wait()
+
+                self.play(FadeIn(loads, shift=RIGHT*7, scale=2))
+                self.wait(0.05)
+                
+                
+                self.play(
+                    storey_4.animate(run_time=2).apply_function( # /!\shear walls should not be included in this deformation
+                        # lambda p: p + np.array([np.sqrt(abs(p[1]))*p[1]**2,0, 0]
+                        lambda p: p + np.array([np.sin(p[1]), 0, 0]
+                    )
+                ).set_color([RED, YELLOW ,RED]),)
+                self.wait(0.3)
+
+                self.play(AnimationGroup(
+                    Unwrite(frame_definition), fr.animate.shift(LEFT*5), 
+                    # fr.animate.set_opacity(0.3), #??????????
+                    # storey_4.animate.set_opacity(0.3), #??????????
+                    lag_ratio=1
+                )                
+                )
+                
+                self.wait()
+                
+                shearwalls = VGroup()
+                for i in range(4):
+                    shearwalls.add(shearwall.copy())
+                    print(shearwalls)
+                shearwalls.arrange(UP, buff=0).next_to(shw, DOWN, buff=0.6)
+                self.add(Rectangle(height=1, width=3, fill_color=GREY, fill_opacity=1).next_to(shearwalls[0], DOWN, buff=0))
+                self.play(*[Create(element) for element in shearwalls]) # shear walls and loads are not included (-1, -2)
+                self.wait(1)
+                shearwall_definition = MarkupText('Shear walls are vertical elements \nof the horizontal force' 
+                                                  'resisting \nsystem. \nShear walls deflects predominantly \nin a '
+                                                  'bending mode deformation \nlike a cantilever, as illustrated '
+                                                  'in \nthe following animation.',
+                                                  font_size=60,
+                                                  font='LM Roman 12',
+                                                  justify = 1,
+
+                ).scale(0.4).next_to(shearwalls, LEFT, buff=1)
+
+                self.play(Indicate(shw, 3),shw.animate.set_opacity(1), fr.animate.set_opacity(0.2))
+                self.wait(0.5)
+                self.play(Write(shearwall_definition))
+                self.wait(0.5)
+                self.play(loads.animate.next_to(shearwalls, LEFT, buff=0).shift(UP*0.58))
+                self.wait()
+                '''
+                interactions = VGroup()
+                # for jf, fd in zip(range(4), [1, 0.6, 0.3, 0.15])
+                inter1 = always_redraw(lambda:
+                    Arrow(start=storey_4[0][4].get_corner(UL),end=storey_4[0][1].get_end(), color=RED_B, buff=0)
+                )
+                # self.add(inter1)
+                # self.play(shearwalls.animate(run_time = 2).shift(RIGHT*3))
+                # self.wait() #Always end with wait
+                # 
+                '''
