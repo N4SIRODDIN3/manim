@@ -236,15 +236,36 @@ class JustifyText(Scene):
 
 class Bibliography(MovingCameraScene):
     def construct(self):
-    
+        # self.camera.background_image = 'C:/Manim_3_feb/manim/Presentation_PhD/UMKBiskra_Logo.png'
+        # self.camera.init_background()
+        # self.camera.background_color = GREY
+        self.add(ImageMobject('C:/Manim_3_feb/manim/Presentation_PhD/UMKBiskra_Logo.png').set_opacity(0.4))
+        png_path = 'C:/Manim_3_feb/manim/Presentation_PhD/simp_python.png'
         self.camera.background_color=WHITE
+        
+        biblio_title = Title("Bibliography", color=BLUE)
+        self.add(biblio_title)
+        
+        simp = (
+            r"(Zakian & Kaveh, 2020) developed a topology optimization formulation based on " 
+            r"the SIMP (stands for: solid isotropic material with penalization) approach to"
+            r" find the stiffest structure with desirable material distribution subjected to"
+            r" seismic loads by investigating different types of shear walls with and"
+            r" without openings."
+        )
+        
+        simp_mobj = MarkupText(simp,font_size=60,font='LM Roman 12',justify = 1, color=BLACK
+        ).scale(0.4).next_to(biblio_title, DOWN, buff=1.5)
+        self.play(LaggedStart(Write(biblio_title), Write(simp_mobj)))
+        
+
         sq = Square(0.5, fill_color=GREY, fill_opacity=0.2)
         sq_small = Square(0.2)
         shear_wall = VGroup(*[sq.copy() for _ in range(60)]).arrange_in_grid(6,10, buff=0).rotate(PI*0.5)
         sq_small_group = VGroup(*[sq_small.copy().set_style(stroke_width=0.4) for _ in range(350)]).arrange_in_grid(14,25, buff=0).rotate(PI*0.5)
         rec = Rectangle(height=3, width=5,stroke_width=0, fill_color=GREY, fill_opacity=1).rotate(PI*0.5)
         SUPPORT = always_redraw( lambda: Rectangle(height=4*1.15, width=0.3,fill_color=GREY,stroke_width=0, fill_opacity=1).rotate(PI*0.5).next_to(rec, DOWN, buff=0))
-        shearwall_simp = ImageMobject('simp_python.png').rotate(PI*0.5).next_to(SUPPORT, UP, buff=0)
+        shearwall_simp = ImageMobject(png_path).rotate(PI*0.5).next_to(SUPPORT, UP, buff=0)
         shearwall_simp.stretch_to_fit_width(width = rec.width).stretch_to_fit_height(rec.height).shift(UP*0.535)
         self.play(Create(rec),Create(SUPPORT))
         self.wait()
