@@ -645,12 +645,72 @@ class Bibliography(ZoomedScene):
             .scale(0.5)
         )
         png_path = "C:/Manim_3_feb/manim/Presentation_PhD/simp_python.png"
-        self.camera.background_color = [WHITE]
+        self.camera.background_color = WHITE
 
         biblio_title = Title("Bibliography", color=RED).to_edge(UP, buff=0)
         my_name = Text("N. DJAFAR HENNI", font_size=27, color=RED).to_edge(DL, buff=0)
         self.add(my_name)
 
+        #----------------------Try-and-error method---------------------#
+        Ali_all = MarkupText(
+            "1) (Ali et al., 2015) carried out a comparative study by varying "
+            "the cross-section and location of RC shear walls for a real stock exchange building"
+            " located in Islamabad. Linear dynamic analysis was carried out on four building "
+            "models with different shear-wall locations, including the actual building.\n"
+            "\tThe responses of the actual and developed building models in terms of time "
+            "period, story drift, and induced shear forces at the base were considered in "
+            "the analysis and presented in a comparative way.\n"
+            "\tResults indicated that the most optimum case came out to be the case where "
+            "shear walls incorporated as the least thickness of 153mm among other cases. "
+            "This process led to a reduction of the overall weight of the structure (19% "
+            "increase in time period and 26% decrease in base shear force).",
+                font = 'Times New Roman',
+                font_size=60,
+                justify=1,
+                line_spacing = 0.5,
+        ).scale(0.4).next_to(biblio_title, DOWN, buff=0.5)
+        self.play(Write(Ali_all))
+        self.wait()
+        self.play(Unwrite(Ali_all))
+        self.wait()
+
+        Titiksh = MarkupText(
+            "2) (Titiksh and Bhatt, 2017) carried out an investigation to determine ideal "
+            "arrangements and effective locations of shear walls in a 10-story high-rising "
+            "building subjected to lateral loads following the Indian standards.\n"
+            "\tThe study considered four different cases for the positions of shear walls "
+            "utilizing ETABS software package for developing the models as well as input "
+            "of seismic loadings.\n"
+            "\tThey concluded that the case with box-type shear wall at the center of the "
+            "geometry is the ideal framing technique that serves the purpose of shear "
+            "walls as well as vertical passages for the movement of the lifts.",
+                font = 'Times New Roman',
+                font_size=60,
+                justify=1,
+                line_spacing = 0.5,
+        ).scale(0.4).next_to(biblio_title, DOWN, buff=0.5)
+        self.play(Write(Titiksh))
+        self.wait()
+        self.play(Unwrite(Titiksh))
+        self.wait()
+
+        Sudhan = MarkupText(
+            "3) (sudhan raokondapalli, 2018) conducted a comparative study by comparing "
+            "various parameters such as storey drift, storey shear and storey displacement "
+            "of a building under lateral loads on strategic location of shear walls.\n"
+            "\tIt was found that the optimum location of shear walls is when they placed at "
+            "core+edges of the building.",
+                font = 'Times New Roman',
+                font_size=60,
+                justify=1,
+                line_spacing = 0.5,
+        ).scale(0.4).next_to(biblio_title, DOWN, buff=0.5)
+        self.play(Write(Sudhan))
+        self.wait()
+        self.play(Unwrite(Sudhan))
+        self.wait()
+
+        #----------------------Using algorithms---------------------#
         simp = (
             r"(Zakian &amp; Kaveh, 2020) developed a topology optimization formulation based on "  # &amp; used to write &.
             "the SIMP (stands for: solid isotropic material with penalization) approach to"
