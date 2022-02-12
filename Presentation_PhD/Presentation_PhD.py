@@ -170,9 +170,10 @@ class JustifyText(Scene):
 
         frame_definition = (
             MarkupText(  # /!\ Adding a new line \n will affect the justify function./!\
-                "A frame is an inter-\nconnection between \nvertical columns and \nhorizontal beams. \n\n"
-                "Frames bend predominantly \nin a shear mode deformation.",
-                font_size=60,
+                "A frame is an interconnection between vertical columns and horizontal beams."
+                "Frames bend predominantly in a shear mode deformation.",
+                font_size=100,
+                # width = 3.5,
                 font="LM Roman 12",
                 justify=1,
                 unpack_groups=0,
@@ -648,7 +649,7 @@ class Bibliography(ZoomedScene):
         self.camera.background_color = WHITE
 
         biblio_title = Title("Bibliography", color=RED).to_edge(UP, buff=0)
-        my_name = Text("N. DJAFAR HENNI", font_size=27, color=RED).to_edge(DL, buff=0)
+        my_name = Text("N. DJAFAR HENNI", font= 'Algerian', font_size=27, color=RED).to_edge(DL, buff=0)
         self.add(my_name)
 
         #----------------------Try-and-error method---------------------#
@@ -734,9 +735,9 @@ class Bibliography(ZoomedScene):
         self.wait()
 
         simp_def = (
-            "The traditional approach to topology \noptimization (place, study) is the \n"
-            "discretization of a domain into a grid \nof a finite elements called isotropic"
-            " \nsolid microstructures."
+            "\tThe traditional approach to topology optimization (place, study) is the "
+            "discretization of a domain into a grid of a finite element called: \nisotropic"
+            " solid microstructures."
         )
 
         sq = Square(0.5, fill_color=GREY, fill_opacity=0.2)
@@ -782,31 +783,33 @@ class Bibliography(ZoomedScene):
         shearwall_simp.stretch_to_fit_width(width=rec.width).stretch_to_fit_height(
             rec.height
         ).shift(UP * 0.535)
-
+        self.add(NumberPlane())
         simp_def_mobj = (
             MarkupText(
                 simp_def,
-                font_size=60,
+                font_size=120,
+                width = 4.5,
                 justify=1,
                 color=BLACK,
             )
-            .next_to(simp_title, DOWN, buff=0)  # next_to() doesn't want to work
-            .scale(0.4)
+            .next_to(simp_title, DOWN, buff=1)  # next_to() doesn't want to work
+            
         )
 
         simp_def_2 = (
-            "It allows Instead of a black and white \nsolution, gray by having in each ele-\n"
-            "ment a density design variable that \ncan vary in [0,1]."
-        )
+            "\tIt allows Instead of a black and white solution, gray by having in each ele"
+            "ment a density design variable that can vary in [0,1]."
+        ) 
+        # Don't forget to add a colormap label [0,1] using valueTracker.....
         simp_def_mobj_2 = (
             MarkupText(
                 simp_def_2,
-                font_size=60,
+                font_size=120,
+                width = 4.5,
                 justify=1,
                 color=BLACK,
             )
-            .next_to(simp_def_mobj, DOWN, buff=0)  # next_to() doesn't want to work
-            .scale(0.4)
+            .next_to(simp_def_mobj, DOWN, buff=0.4)  # next_to() doesn't want to work
         )
 
         sw_label = Text("RC Shear wall", color=BLACK, font_size=37).next_to(
@@ -845,7 +848,17 @@ class Bibliography(ZoomedScene):
         self.wait()
 
         # Here add a text definition for colors: gray, black, white
-
+        color_map = Rectangle(
+                height=3.20,
+                width=0.3,
+                fill_color=[BLACK, WHITE], # because it's rotated we reversed the colors.
+                stroke_width=1,
+                stroke_color = BLACK,
+                fill_opacity=1,
+            ).rotate(PI * 0.5).next_to(simp_def_mobj_2, DOWN, buff=0.2)
+        self.play(Create(color_map))
+        self.wait()
+        '''
         self.play(
             FadeIn(load, shift=RIGHT * 5),
         )
@@ -897,8 +910,33 @@ class Bibliography(ZoomedScene):
         self.play(
             self.zoomed_camera.frame.animate.shift(2 * UP)
         )  # The output of the zoom
-        self.wait()
+        self.wait()'''
         """self.play(self.camera.frame.animate.scale(1/2)) # Change the initial camera frame scale(=1)
         # to the given scale(=0.5) => shrink the frame
         self.play(self.camera.frame.animate.shift(UR*1)) # shift the camera frame to the given position
-"""
+        """
+
+        # Continuing with what Pooya did.
+        self.remove()
+        pooya_study = (
+            MarkupText(
+                "\tKaveh and Pooya investigated different types of shear walls with/without opening."
+                " Additionally, the effects of shear wall-frame interaction for single and coupled "
+                "shear walls were studied. The models are: Four-story shear wall, Eight-story shear wall, "
+                "Twelve-story shear wall, Twelve-story shear wall with opening, Eight story shear "
+                "wall-frame, Twelve-story shear wall-frame."
+                # Conclusion:
+                # add the Image before this text.
+                "\n\tThe optimization demonstrated that for the highest part, a significant amount of material "
+                "can be saved which is also manifested from the lowest part of the structure. \n"
+                "\tIt was also visible that the existence of the coupled beams is definitely necessary for the "
+                "middle part of the structure, while they are only necessary for the other parts to resist "
+                "gravity loads. \n\tThis optimization process has efficiently reached the optimal placement of "
+                "openings and optimal removal of inefficient materials upon reaching minimal strengthening "
+                "with maximum performance.",
+                font_size=60,
+                justify=1,
+                color=BLACK,
+            ).scale(0.4)
+            .next_to(simp_def_mobj, DOWN, buff=0.4)  # next_to() doesn't want to work
+        )
