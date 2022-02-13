@@ -858,7 +858,7 @@ class Bibliography(ZoomedScene):
             ).rotate(PI * 0.5).next_to(simp_def_mobj_2, DOWN, buff=0.2)
         self.play(Create(color_map))
         self.wait()
-        '''
+        
         self.play(
             FadeIn(load, shift=RIGHT * 5),
         )
@@ -898,6 +898,8 @@ class Bibliography(ZoomedScene):
         )
 
         # Zooming part:
+        self.zoomed_camera.frame.set_style(stroke_color= RED)
+        self.zoomed_display.display_frame.set_style(stroke_color= RED)
         self.activate_zooming(
             animate=True
         )  # Add an initial animtaion to activate the zoom.
@@ -910,14 +912,20 @@ class Bibliography(ZoomedScene):
         self.play(
             self.zoomed_camera.frame.animate.shift(2 * UP)
         )  # The output of the zoom
-        self.wait()'''
+        self.wait()
         """self.play(self.camera.frame.animate.scale(1/2)) # Change the initial camera frame scale(=1)
         # to the given scale(=0.5) => shrink the frame
         self.play(self.camera.frame.animate.shift(UR*1)) # shift the camera frame to the given position
         """
+        # self.play(Uncreate(self.zoomed_camera.frame), Uncreate(self.zoomed_display)) didn't work
+        self.play(Uncreate(self.zoomed_display.display_frame), FadeOut(self.zoomed_camera.frame))
+        self.wait()
+        # Uncreate all objects on the scene except title and my name.
+        to_remove = VGroup(simp_title, simp_def_mobj, simp_def_mobj_2, shear_wall, simp_mobj, load, SUPPORT, color_map, sw_label)
+        # shearwall image can't be added to the group. , shearwall_simp
+        self.play(Uncreate(to_remove), FadeOut(shearwall_simp), FadeOut(rec))
 
         # Continuing with what Pooya did.
-        self.remove()
         pooya_study = (
             MarkupText(
                 "\tKaveh and Pooya investigated different types of shear walls with/without opening."
@@ -938,5 +946,18 @@ class Bibliography(ZoomedScene):
                 justify=1,
                 color=BLACK,
             ).scale(0.4)
-            .next_to(simp_def_mobj, DOWN, buff=0.4)  # next_to() doesn't want to work
+            .next_to(biblio_title, DOWN, buff=0.4) 
         )
+        self.play(Write(pooya_study))
+        pooya_svg = SVGMobject(
+            'C:/Manim_3_feb/manim/Presentation_PhD/image2Vector.svg'
+        )
+
+#----------------------Plan de travail ---------------------#
+class work_plan(Scene):
+    def construct(self):
+        # Add the needed mobjs to the scene
+
+        # Work plan
+        plan_title = Title("Work plan", color=RED).to_edge(UP, buff=0)
+        BulletedList()
