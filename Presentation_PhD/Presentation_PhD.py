@@ -1,6 +1,10 @@
 from manim import *
 import random as rd
 
+# Resetting the defautt values of almost all Mobjs:
+VMobject.set_default(color=BLACK)
+SingleStringMathTex.set_default(color=BLACK)
+Tex.set_default(color=BLACK)
 
 def make_component(text, color=YELLOW, scale=0.7):
     # geometry is first index, TextMob is second index
@@ -160,7 +164,7 @@ class JustifyText(Scene):
         self.play( # stroke_color is not an param for surroundingrec, but we need this. see the beginning of this class.
             Create(SurroundingRectangle(intro_2[1][0:10], stroke_color=DARK_BLUE)),
             Create(
-                SurroundingRectangle(intro_2[1][13:19]), stroke_color=RED_C
+                SurroundingRectangle(intro_2[1][13:19]), stroke_color=RED
             ),  # 's' of frames is included
             run_time=2,
             rate_func=there_and_back_with_pause,
@@ -329,9 +333,9 @@ class JustifyText(Scene):
             self.play(Create(element))
         self.wait(1)
 
-        self.play(loads.animate.next_to(shearwalls, LEFT, buff=0).shift(UP * 0.58))
+        self.play(loads.set_opacity(1).animate.next_to(shearwalls, LEFT, buff=0).shift(UP * 0.58))
         self.wait(0.2)
-
+        
         self.play(
             shearwalls.animate(
                 run_time=2, rate_func=there_and_back_with_pause
@@ -347,13 +351,21 @@ class JustifyText(Scene):
             ),  # Write the rest of the shearwall defi simultaneously
         )
         self.wait(0.3)
-
+        self.remove(loads)
         self.play(
             Unwrite(shearwall_definition),
             shw.animate.next_to(fr, RIGHT, buff=2),
-            FadeOut(loads),
+            
         )
         self.wait()
+        for l in storey_4:
+            l.remove(l[-1]) # Remove the loads form the storey_4
+        
+        # Now, remove the updater to change the opacity.
+        storey_4.clear_updaters() # Clear all updaters even lambdas.
+        storey_4.set_opacity(1)
+        self.wait(0.2)
+
         self.play(
             AnimationGroup(
                 fr.animate.set_opacity(1),
@@ -376,18 +388,22 @@ class JustifyText(Scene):
         )
         self.play(TransformMatchingShapes(shw_fr_group, shw_fr_label))
         self.wait(0.4)
-        # Now, remove the updater to change the opacity.
-        storey_4.clear_updaters() # Clear all updaters even lambdas.
-        storey_4.set_opacity(1)
-        self.wait(0.2)
-        shearwalls.remove_updater(lambda mob: mob.next_to(shw, DOWN, buff=0.6))
+        shearwalls.clear_updaters()
+        self.play(storey_4.animate.next_to(shw_fr_label, DOWN, buff=0.4),)
+        self.play(shearwalls.animate.next_to(storey_4, RIGHT, buff=0),)
+        self.play(loads.animate.next_to(storey_4, LEFT, buff=0).shift(UP * 0.57),)
+        self.wait()
+        sw_frame = VGroup(storey_4, shearwalls)
         self.play(
-            AnimationGroup(
-                storey_4.animate.next_to(shw_fr_label, DOWN, buff=0.4),
-                shearwalls.animate.next_to(storey_4, RIGHT, buff=0),
-                loads.animate.next_to(storey_4, LEFT, buff=0),
-                lag_ratio=1,
+            sw_frame.animate(
+                run_time=2, rate_func=there_and_back_with_pause
+            )  # (t=0.3, pause_ratio=0.8)
+            .apply_function(
+                # lambda p: p + np.array([np.sqrt(abs(p[1]))*p[1]**2,0, 0]
+                lambda p: p
+                + np.array([np.sin(p[1]), 0, 0])
             )
+            .set_color([RED, YELLOW, RED]),
         )
         """interactions = VGroup()
                 # for jf, fd in zip(range(4), [1, 0.6, 0.3, 0.15])
@@ -409,15 +425,20 @@ class JustifyText(Scene):
         # --------------------- Cut to the chase --------------------
 
 
+        # -------------Don't forget to FadeOut the chapter's title before the next scene--------------------
 class Shearwall_Systems(Scene):
     def construct(self):
+        VMobject.set_default(color=BLACK)
+        MarkupText.set_default(color = BLACK)
+        SingleStringMathTex.set_default(color=BLACK)
+        Tex.set_default(color=BLACK)
+        self.camera.background_color = WHITE
         self.add(
             ImageMobject("C:/Manim_3_feb/manim/Presentation_PhD/UMKBiskra_Logo.png")
             .set_opacity(0.4)
             .scale(0.5)
         )
 
-        # self.camera.background_color = [WHITE]
 
         my_name = Text(
             "N. DJAFAR HENNI", font="ALGERIAN", font_size=27, color=RED
@@ -571,6 +592,7 @@ class Shearwall_Systems(Scene):
             )
         )
         self.wait()
+        # -------------Don't forget to FadeOut the title of chapter before the next scene--------------------
 
 class Problematic(Scene):
     def construct(self):
@@ -642,6 +664,8 @@ class Problematic(Scene):
         self.wait()
         self.play(Unwrite(Objective))
 
+        # -------------Don't forget to FadeOut the title of chapter before the next scene--------------------
+
 class Bibliography(ZoomedScene):
     def __init__(self, **kwargs):  # HEREFROM
         ZoomedScene.__init__(
@@ -652,17 +676,21 @@ class Bibliography(ZoomedScene):
             image_frame_stroke_width=1,  # stroke of the image frame
             zoomed_camera_config={
                 "default_frame_stroke_width": 7, # stroke width of the frame.
-                "background_opacity": 0, # Show the background: like transparent
+                "background_opacity": 1, # Show the background: 0 = transparent
             },
+            zoomed_display_corner= UP + LEFT, # self.zoomed_d.... it didn't work
             **kwargs,
         )
 
     def construct(self):
-        # self.camera.background_image = 'C:/Manim_3_feb/manim/Presentation_PhD/UMKBiskra_Logo.png'
         # self.camera.init_background()
         # self.camera.background_color = GREY
-        MathTex.set_default(fill_color=BLACK)
-        MarkupText.set_default(color = BLACK)
+        # MathTex.set_default(fill_color=BLACK)
+        # MarkupText.set_default(color = BLACK)
+        VMobject.set_default(color=BLACK)
+        SingleStringMathTex.set_default(color=BLACK)
+        Tex.set_default(color=BLACK)
+
 
         self.add(
             ImageMobject("C:/Manim_3_feb/manim/Presentation_PhD/UMKBiskra_Logo.png")
@@ -676,7 +704,7 @@ class Bibliography(ZoomedScene):
         my_name = Text("N. DJAFAR HENNI", font= 'Algerian', font_size=27, color=RED).to_edge(DL, buff=0)
         self.add(my_name)
         self.play(Write(biblio_title))
-
+        
         #----------------------Try-and-error method---------------------#
         Ali_all = MarkupText(
             "1) (Ali et al., 2015) carried out a comparative study by varying "
@@ -921,44 +949,11 @@ class Bibliography(ZoomedScene):
             shearwall_simp.animate.set_opacity(1),
             run_time=3,
         )
-
-        # Zooming part:
-        zoomed_camera_text = Text("Zoomed shearwall", color=RED, font_size=42) # label of the zoomed display
-        self.zoomed_camera.frame.set_style(stroke_color= RED)
-        self.zoomed_display.display_frame.set_style(stroke_color= RED)
-        self.activate_zooming(
-            animate=True
-        )  # Add an initial animtaion to activate the zoom.
-        zoomed_camera_text.next_to(self.zoomed_display.display_frame, DOWN) # label
-        self.play(FadeIn(zoomed_camera_text, shift=UP)) # label
-        self.wait()
-        self.play(
-            self.zoomed_camera.frame.animate.move_to(rec.get_bottom())
-        )  # Change the initial zoomed camera frame position
-        # to the given position
-        self.wait()
-        self.play(
-            self.zoomed_camera.frame.animate.shift(5 * UP)
-        )  # The output of the zoom
-        self.wait()
-        """self.play(self.camera.frame.animate.scale(1/2)) # Change the initial camera frame scale(=1)
-        # to the given scale(=0.5) => shrink the frame
-        self.play(self.camera.frame.animate.shift(UR*1)) # shift the camera frame to the given position
-        """
-        # Animate the deactivation of the zooming.
-        zd_rect = BackgroundRectangle(self.zoomed_display, fill_opacity=0, buff=MED_SMALL_BUFF)
-        self.add_foreground_mobject(zd_rect)
-
-        unfold_camera = UpdateFromFunc(zd_rect, lambda rect: rect.replace(self.zoomed_display))
-
-        self.play(self.get_zoomed_display_pop_out_animation(), unfold_camera, rate_func=lambda t: smooth(1 - t))
-        self.play(Uncreate(self.zoomed_display.display_frame), FadeOut(self.zoomed_camera.frame))
-        self.wait()
         # Uncreate all objects on the scene except title and my name.
         to_remove = VGroup(simp_title, simp_def_mobj, simp_def_mobj_2, shear_wall, load, SUPPORT, color_map, sw_label, design_domain)
         # shearwall image can't be added to the group. , shearwall_simp
-        self.play(Uncreate(to_remove), Unwrite(zoomed_camera_text), FadeOut(shearwall_simp), FadeOut(rec))
-
+        self.play(Uncreate(to_remove), FadeOut(shearwall_simp), FadeOut(rec))
+        
         # Continuing with what Pooya did.
         pooya_study = (
             MarkupText(
@@ -977,26 +972,77 @@ class Bibliography(ZoomedScene):
                 "openings and optimal removal of inefficient materials upon reaching minimal strengthening "
                 "with maximum performance.",
                 font_size=60,
+                width = 9,
                 justify=1,
                 color=BLACK,
                 unpack_groups = 0,
-            ).scale(0.4)
-            .next_to(biblio_title, DOWN, buff=0.4) 
+            )
+            .align_on_border(LEFT, buff = 0.1) 
         )
         self.play(Write(pooya_study[:7])) # Conclusion not included
         self.wait()
-        self.play(FadeOut(pooya_study[:7], shift = UP))
-        self.wait(0.5)
+        # self.play(FadeOut(pooya_study[:7], shift = UP))
+        # self.wait(0.5)
         # Pooya conclusion
         pooya_svg = SVGMobject(
             'C:/Manim_3_feb/manim/Presentation_PhD/simp_pooya_1.svg'
         )
         self.play(
-            Write(pooya_study[7:].next_to(biblio_title, DOWN, buff=0.3)), 
+            Write(pooya_study[7:]), 
             DrawBorderThenFill(
-                pooya_svg[:2].scale(3.5).next_to(pooya_study[6:], DOWN))
+                pooya_svg[:2].scale(3.5).align_on_border(RIGHT))
         )
         self.wait(0.5)
+        #---------------------Zooming part:-------------------------
+        zoomed_camera_text = Text("Zoomed structure", color=RED, font_size=32) # label of the zoomed display
+        self.zoomed_camera.frame.set_style(stroke_color= RED)
+        self.zoomed_display.display_frame.set_style(stroke_color= RED)
+        # Change it's initial position
+        self.zoomed_camera_frame_starting_position = pooya_svg.get_center() # didn't work 
+        self.zoomed_display_corner= UP + LEFT, # didn't work
+        self.activate_zooming(
+            animate=True
+        )  # Add an initial animtaion to activate the zoom.
+        zoomed_camera_text.next_to(self.zoomed_display.display_frame, UP, buff = 0.2) # label
+        self.play(FadeIn(zoomed_camera_text, shift=UP)) # label
+        self.wait()
+        self.play(
+            self.zoomed_camera.frame.animate.move_to(pooya_svg.get_top()).shift(RIGHT * 1.65).shift(3.5 * DOWN)
+        )  # Change the initial zoomed camera frame position
+        # to the given position
+        self.wait()
+        self.play(
+            self.zoomed_camera.frame.animate.shift(1.8 * DOWN)
+        )  # The output of the zoom
+        self.wait()
+        self.play(
+            self.zoomed_camera.frame.animate.scale([0.35, 1.2, 0]).shift(UP*0.3)
+        )  # Change the dimensions of the frame.
+        self.wait()
+        self.play(
+            self.zoomed_camera.frame.animate(rate_func = there_and_back_with_pause).shift(UP*0.6) # they are definetly necessary to....
+        )  # Change the dimensions of the frame.
+        self.wait()
+        self.play(AnimationGroup(
+            self.zoomed_camera.frame.animate.shift(UP*1.8), # while they are only necessary to resist...
+            self.zoomed_camera.frame.animate.shift(DOWN*0.3),
+            lag_ratio = 1
+            )  # Change the dimensions of the frame.
+        )
+        self.wait()
+        """self.play(self.camera.frame.animate.scale([x=1/2, y=, z=]) # Change the initial camera frame scale(=1)
+        # to the given scale(x=0.5) => shrink the frame
+        self.play(self.camera.frame.animate.shift(UR*1)) # shift the camera frame to the given position
+        """
+        # Animate the deactivation of the zooming.
+        zd_rect = BackgroundRectangle(self.zoomed_display, fill_opacity=0, buff=MED_SMALL_BUFF)
+        self.add_foreground_mobject(zd_rect)
+        #unfold = reveal, uncover
+        unfold_camera = UpdateFromFunc(zd_rect, lambda rect: rect.replace(self.zoomed_display))
+
+        self.play(self.get_zoomed_display_pop_out_animation(), unfold_camera, rate_func=lambda t: smooth(1 - t))
+        self.play(Uncreate(self.zoomed_display.display_frame), FadeOut(self.zoomed_camera.frame))
+        self.wait()
 #----------------------Plan de travail ---------------------#
 class work_plan(Scene):
     def construct(self):
