@@ -82,6 +82,20 @@ class ChangingCameraWidthAndRestore(MovingCameraScene):
 
 class JustifyText(Scene):
     def construct(self):
+        # Resetting default values:
+        MathTex.set_default(fill_color=BLACK)
+        # It will affect the SurroundingRectangle mobj, but you can set the color from stroke_color
+        # Because the set_default(stroke_color) will override the color attribute.
+        Rectangle.set_default(stroke_color=BLACK) 
+        MarkupText.set_default(color = BLACK)
+        Title.set_default(color = BLACK)
+        Line.set_default(color = BLACK)
+        Arrow.set_default(color = BLACK)
+        Tex.set_default(color = BLACK)
+        Text.set_default(color = BLACK)
+        # Set the background to WHITE
+        self.camera.background_color = WHITE
+
         self.add(
             ImageMobject("C:/Manim_3_feb/manim/Presentation_PhD/UMKBiskra_Logo.png")
             .set_opacity(0.4)
@@ -103,8 +117,8 @@ class JustifyText(Scene):
             " seismic loading. It’s well know that RC shear walls represent a structurally"  # smartly stoped at efficient
             " efficient system to stiffen an RC building under those loads."
         )
-        Int_2 = (
-            "\tIn general, a shear wall system consists of a combination of shear walls and frames"
+        Int_2 = ( # the spaces after (of:) are helpful because shear is in line and walls in the next line.
+            "\tIn general, a shear wall system consists of a combination of:     shear walls and frames"
             " because this type of systems normally provide the required stiffness and strength"
             " to withstand lateral loads in medium-high and even low rise buildings."
         )
@@ -143,10 +157,10 @@ class JustifyText(Scene):
         )
         self.wait(0.4)
 
-        self.play(
-            Create(SurroundingRectangle(intro_2[1][0:10], color=RED)),
+        self.play( # stroke_color is not an param for surroundingrec, but we need this. see the beginning of this class.
+            Create(SurroundingRectangle(intro_2[1][0:10], stroke_color=DARK_BLUE)),
             Create(
-                SurroundingRectangle(intro_2[1][13:19]), color=RED
+                SurroundingRectangle(intro_2[1][13:19]), stroke_color=RED_C
             ),  # 's' of frames is included
             run_time=2,
             rate_func=there_and_back_with_pause,
@@ -171,14 +185,13 @@ class JustifyText(Scene):
         frame_definition = (
             MarkupText(  # /!\ Adding a new line \n will affect the justify function./!\
                 "A frame is an interconnection between vertical columns and horizontal beams."
-                "Frames bend predominantly in a shear mode deformation.",
-                font_size=100,
-                # width = 3.5,
+                "\nFrames bend predominantly in a shear mode deformation.",
+                font_size=120,
+                width = 5,
                 font="LM Roman 12",
                 justify=1,
                 unpack_groups=0,
             )
-            .scale(0.4)
             .align_on_border(LEFT)
         )
 
@@ -230,7 +243,7 @@ class JustifyText(Scene):
                     # Create(fond1),
                     # Create(fond2),
                     Create(element[:-1]),
-                    Write(frame_definition[:4]),
+                    Write(frame_definition[:3]),
                     run_time=3,
                 )  # loads are not included (-1)
                 # here add support for the first storey
@@ -242,24 +255,29 @@ class JustifyText(Scene):
 
         self.play(FadeIn(loads, shift=RIGHT * 7, scale=2))
         self.wait(0.05)
-
+        
         self.play(
-            storey_4.animate(run_time=2, rate_func=there_and_back_with_pause)
+            storey_4.animate( rate_func=there_and_back_with_pause)
             .apply_function(  # /!\shear walls should not be included in this deformation
                 # lambda p: p + np.array([np.sqrt(abs(p[1]))*p[1]**2,0, 0]
-                lambda p: p
-                + np.array([np.sin(p[1]), 0, 0])
+                lambda p: p + np.array([np.sin(p[1]), 0, 0])
             )
             .set_color([RED, YELLOW, RED]),
-            Write(frame_definition[4:]),  # Write the rest of the text simultaneously
+            Write(frame_definition[3:].shift(DOWN)),  # Write the rest of the text simultaneously
+            run_time=3,
         )
+        
         self.wait(0.3)
-
+        
         self.play(Unwrite(frame_definition))
         self.wait()
         self.play(fr.animate.set_opacity(0.3).to_edge(LEFT))
-        self.play(storey_4.animate.set_opacity(0.3))
+        def storey_op(mob):
+            mob.set_opacity(0.3)
+        storey_4.add_updater(storey_op)
+        # /!\ Don't forget to remove this updater afterwards.
         self.wait()
+        
 
         shearwalls = VGroup()
         for i in range(4):
@@ -358,7 +376,10 @@ class JustifyText(Scene):
         )
         self.play(TransformMatchingShapes(shw_fr_group, shw_fr_label))
         self.wait(0.4)
-        # storey_4.remove_updater
+        # Now, remove the updater to change the opacity.
+        storey_4.clear_updaters() # Clear all updaters even lambdas.
+        storey_4.set_opacity(1)
+        self.wait(0.2)
         shearwalls.remove_updater(lambda mob: mob.next_to(shw, DOWN, buff=0.6))
         self.play(
             AnimationGroup(
@@ -630,8 +651,8 @@ class Bibliography(ZoomedScene):
             zoomed_display_width=6,  # width of the frame
             image_frame_stroke_width=1,  # stroke of the image frame
             zoomed_camera_config={
-                "default_frame_stroke_width": 3,
-                "background_opacity": 0,
+                "default_frame_stroke_width": 7, # stroke width of the frame.
+                "background_opacity": 0, # Show the background: like transparent
             },
             **kwargs,
         )
@@ -640,6 +661,9 @@ class Bibliography(ZoomedScene):
         # self.camera.background_image = 'C:/Manim_3_feb/manim/Presentation_PhD/UMKBiskra_Logo.png'
         # self.camera.init_background()
         # self.camera.background_color = GREY
+        MathTex.set_default(fill_color=BLACK)
+        MarkupText.set_default(color = BLACK)
+
         self.add(
             ImageMobject("C:/Manim_3_feb/manim/Presentation_PhD/UMKBiskra_Logo.png")
             .set_opacity(0.4)
@@ -651,6 +675,7 @@ class Bibliography(ZoomedScene):
         biblio_title = Title("Bibliography", color=RED).to_edge(UP, buff=0)
         my_name = Text("N. DJAFAR HENNI", font= 'Algerian', font_size=27, color=RED).to_edge(DL, buff=0)
         self.add(my_name)
+        self.play(Write(biblio_title))
 
         #----------------------Try-and-error method---------------------#
         Ali_all = MarkupText(
@@ -733,7 +758,7 @@ class Bibliography(ZoomedScene):
         )
         self.play(FadeOut(simp_mobj, shift=UP), FadeIn(simp_title, shift=UP))
         self.wait()
-
+        
         simp_def = (
             "\tThe traditional approach to topology optimization (place, study) is the "
             "discretization of a domain into a grid of a finite element called: \nisotropic"
@@ -898,39 +923,48 @@ class Bibliography(ZoomedScene):
         )
 
         # Zooming part:
+        zoomed_camera_text = Text("Zoomed shearwall", color=RED, font_size=42) # label of the zoomed display
         self.zoomed_camera.frame.set_style(stroke_color= RED)
         self.zoomed_display.display_frame.set_style(stroke_color= RED)
         self.activate_zooming(
             animate=True
         )  # Add an initial animtaion to activate the zoom.
+        zoomed_camera_text.next_to(self.zoomed_display.display_frame, DOWN) # label
+        self.play(FadeIn(zoomed_camera_text, shift=UP)) # label
         self.wait()
         self.play(
-            self.zoomed_camera.frame.animate.move_to(rec.get_center())
+            self.zoomed_camera.frame.animate.move_to(rec.get_bottom())
         )  # Change the initial zoomed camera frame position
         # to the given position
         self.wait()
         self.play(
-            self.zoomed_camera.frame.animate.shift(2 * UP)
+            self.zoomed_camera.frame.animate.shift(5 * UP)
         )  # The output of the zoom
         self.wait()
         """self.play(self.camera.frame.animate.scale(1/2)) # Change the initial camera frame scale(=1)
         # to the given scale(=0.5) => shrink the frame
         self.play(self.camera.frame.animate.shift(UR*1)) # shift the camera frame to the given position
         """
-        # self.play(Uncreate(self.zoomed_camera.frame), Uncreate(self.zoomed_display)) didn't work
+        # Animate the deactivation of the zooming.
+        zd_rect = BackgroundRectangle(self.zoomed_display, fill_opacity=0, buff=MED_SMALL_BUFF)
+        self.add_foreground_mobject(zd_rect)
+
+        unfold_camera = UpdateFromFunc(zd_rect, lambda rect: rect.replace(self.zoomed_display))
+
+        self.play(self.get_zoomed_display_pop_out_animation(), unfold_camera, rate_func=lambda t: smooth(1 - t))
         self.play(Uncreate(self.zoomed_display.display_frame), FadeOut(self.zoomed_camera.frame))
         self.wait()
         # Uncreate all objects on the scene except title and my name.
-        to_remove = VGroup(simp_title, simp_def_mobj, simp_def_mobj_2, shear_wall, simp_mobj, load, SUPPORT, color_map, sw_label)
+        to_remove = VGroup(simp_title, simp_def_mobj, simp_def_mobj_2, shear_wall, load, SUPPORT, color_map, sw_label, design_domain)
         # shearwall image can't be added to the group. , shearwall_simp
-        self.play(Uncreate(to_remove), FadeOut(shearwall_simp), FadeOut(rec))
+        self.play(Uncreate(to_remove), Unwrite(zoomed_camera_text), FadeOut(shearwall_simp), FadeOut(rec))
 
         # Continuing with what Pooya did.
         pooya_study = (
             MarkupText(
                 "\tKaveh and Pooya investigated different types of shear walls with/without opening."
                 " Additionally, the effects of shear wall-frame interaction for single and coupled "
-                "shear walls were studied. The models are: Four-story shear wall, Eight-story shear wall, "
+                "shear walls were studied. 6 models were developed which are: Four-story shear wall, Eight-story shear wall, "
                 "Twelve-story shear wall, Twelve-story shear wall with opening, Eight story shear "
                 "wall-frame, Twelve-story shear wall-frame."
                 # Conclusion:
@@ -945,19 +979,56 @@ class Bibliography(ZoomedScene):
                 font_size=60,
                 justify=1,
                 color=BLACK,
+                unpack_groups = 0,
             ).scale(0.4)
             .next_to(biblio_title, DOWN, buff=0.4) 
         )
-        self.play(Write(pooya_study))
+        self.play(Write(pooya_study[:7])) # Conclusion not included
+        self.wait()
+        self.play(FadeOut(pooya_study[:7], shift = UP))
+        self.wait(0.5)
+        # Pooya conclusion
         pooya_svg = SVGMobject(
-            'C:/Manim_3_feb/manim/Presentation_PhD/image2Vector.svg'
+            'C:/Manim_3_feb/manim/Presentation_PhD/simp_pooya_1.svg'
         )
-
+        self.play(
+            Write(pooya_study[7:].next_to(biblio_title, DOWN, buff=0.3)), 
+            DrawBorderThenFill(
+                pooya_svg[:2].scale(3.5).next_to(pooya_study[6:], DOWN))
+        )
+        self.wait(0.5)
 #----------------------Plan de travail ---------------------#
 class work_plan(Scene):
     def construct(self):
         # Add the needed mobjs to the scene
+        self.camera.background_color = WHITE
+        # Work plan 'Chapters'
+        plan_title = Title("Chapters", color=RED).to_edge(UP, buff=0)
+        self.play(Write(plan_title))
 
-        # Work plan
-        plan_title = Title("Work plan", color=RED).to_edge(UP, buff=0)
-        BulletedList()
+        Tex.set_default(color = BLACK)
+        plan_list = [
+            'I-	A literature review on structures with and without shear wall-frame' 
+            'interaction, and different analysis methods (linear and nonlinear).', 
+            'II- Linear and nonlinear dynamic analyses methods existing in the literature '
+            'for RC shear wall structures',
+            'III- Nonlinear static pushover method and its recent enhancements.', 
+            'IV- Introduction of variants with different shear wall distributions and stiffness ratios',
+            'V-	Multiple key parameters are taken in order to evaluate the aforementioned variants in terms '
+            'of strength and rigidity.', 
+            'VI- Conclusions and recommendations are carried out for future works. ',
+        ]
+
+        bulleted_list = BulletedList(
+            *[plan_list[i] for i in range(5)], 
+            dot_scale_factor=4,
+        ).scale(0.7)
+        for item in bulleted_list:
+            item[0].set_style(fill_color = RED, stroke_width = 4, stroke_color = GREEN_C)
+        for item in bulleted_list:
+            self.play(LaggedStart(
+            *[DrawBorderThenFill(item[0]), Write(item[1:])],
+            lag_ratio = 1
+            ) # The last item is missing in the scene.
+        )
+            
