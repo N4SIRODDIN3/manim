@@ -113,7 +113,7 @@ class JustifyText(Scene):
         ).to_edge(DL, buff=0)
         self.add(my_name)
 
-        intro_title = Title("Introduction")
+        intro_title = Title("Introduction", color = RED)
         self.add(intro_title)
 
         Int_1 = (
@@ -164,7 +164,7 @@ class JustifyText(Scene):
         self.play( # stroke_color is not an param for surroundingrec, but we need this. see the beginning of this class.
             Create(SurroundingRectangle(intro_2[1][0:10], stroke_color=DARK_BLUE)),
             Create(
-                SurroundingRectangle(intro_2[1][13:19]), stroke_color=RED
+                SurroundingRectangle(intro_2[1][13:19]), stroke_color=GREEN
             ),  # 's' of frames is included
             run_time=2,
             rate_func=there_and_back_with_pause,
@@ -183,7 +183,7 @@ class JustifyText(Scene):
         )
         self.wait(1)
 
-        self.play(Indicate(fr, 3), shw.animate.set_opacity(0.2))
+        self.play(Indicate(fr, 3, color = GREEN), shw.animate.set_opacity(0.2))
         self.wait(0.5)
 
         frame_definition = (
@@ -297,7 +297,7 @@ class JustifyText(Scene):
 
         self.play(shw.animate.set_opacity(1).shift(3 * LEFT))
 
-        self.play(Indicate(shw, 3))
+        self.play(Indicate(shw, 3, color = GREEN))
 
         self.wait(0.5)
 
@@ -366,16 +366,18 @@ class JustifyText(Scene):
         storey_4.set_opacity(1)
         self.wait(0.2)
 
+        plus = Text("+").next_to(shearwalls, LEFT)
+        equal = Text("=").next_to(shearwalls, RIGHT)
         self.play(
             AnimationGroup(
                 fr.animate.set_opacity(1),
                 ApplyWave(storey_4),
                 Indicate(
-                    Text("+").next_to(shearwalls, LEFT), 3
+                    plus , 3
                 ),  # next_to(storey_4, RIGHT) try to find
                 # the issue later. COMPARE IT WITH SHEARWALLS BECASUE IT WORKS WITH THEM.
                 ApplyWave(shearwalls),
-                Indicate(Text("=").next_to(shearwalls, RIGHT), 3),
+                Indicate(equal , 3),
                 lag_ratio=1,
             )
         )
@@ -391,12 +393,30 @@ class JustifyText(Scene):
         shearwalls.clear_updaters()
         self.play(storey_4.animate.next_to(shw_fr_label, DOWN, buff=0.4),)
         self.play(shearwalls.animate.next_to(storey_4, RIGHT, buff=0),)
-        self.play(loads.animate.next_to(storey_4, LEFT, buff=0).shift(UP * 0.57),)
+        # Remove the residual:
+        self.play(Unwrite(plus), Unwrite(equal), Unwrite(shw), Unwrite(fr),)
+        # fade the load simultaneously with writting the paragraph:
+        sw_frame_def = MarkupText(
+            "Since their mode of deflection varies, the frame tends to restrain the "
+            "shear wall in upper stories, and the shear wall tends to restrain the "
+            "frame in lower stories. \nThis reduces the lateral deflection and improves "
+            "the overall efficiency of the structural system.",
+                font_size=60,
+                width = 6,
+                font="LM Roman 12",
+                justify=1,
+                unpack_groups=0,
+            ).align_on_border(LEFT, buff=0.1)
+        
+        self.play(
+            FadeIn(loads.next_to(storey_4, LEFT, buff=0).shift(UP * 0.57), shift = RIGHT*5, scale = 2),
+            run_time = 1
+        )
         self.wait()
         sw_frame = VGroup(storey_4, shearwalls)
         self.play(
             sw_frame.animate(
-                run_time=2, rate_func=there_and_back_with_pause
+                 rate_func=there_and_back_with_pause
             )  # (t=0.3, pause_ratio=0.8)
             .apply_function(
                 # lambda p: p + np.array([np.sqrt(abs(p[1]))*p[1]**2,0, 0]
@@ -404,6 +424,9 @@ class JustifyText(Scene):
                 + np.array([np.sin(p[1]), 0, 0])
             )
             .set_color([RED, YELLOW, RED]),
+            
+            Write(sw_frame_def),
+            run_time=3,
         )
         """interactions = VGroup()
                 # for jf, fd in zip(range(4), [1, 0.6, 0.3, 0.15])
@@ -445,7 +468,7 @@ class Shearwall_Systems(Scene):
         ).to_edge(DL, buff=0)
         self.add(my_name)
 
-        intro_title = Title("Introduction").to_edge(UP, buff=0)
+        intro_title = Title("Introduction", color = RED).to_edge(UP, buff=0)
         self.add(intro_title)
 
         text = ()
@@ -490,7 +513,7 @@ class Shearwall_Systems(Scene):
             r"\frac{\sum F_{\text {frame }}}{\sum F_{\text {frame }}+\sum F_{\text {shearwall }}} \geq 75 \%"
             r"\text{: Percentage of loads retained by shear walls.}",
             # tex_to_color_map=GRAY
-        ).scale(0.6)
+        ).scale(0.6).set_style(fill_color=ORANGE) # color can be changed through fill_color
         shearwall_systems2 = MarkupText(  # gravity is smth like justify
                                           # /!\ underline is a line takes [] index, too./!\
             # MathTex(equation)
@@ -532,7 +555,7 @@ class Shearwall_Systems(Scene):
                 Write(
                     equations[0]
                     .next_to(shearwall_systems2[3], DOWN) 
-                    .set_style(fill_color=BLUE)
+                    
                     .shift(RIGHT*3)
                 ),
                 Write(shearwall_systems2[4].next_to(shearwall_systems2[3], DOWN, buff=1.2)),# Implicitly means
@@ -545,7 +568,7 @@ class Shearwall_Systems(Scene):
             ReplacementTransform(
                     equations[0].copy(), 
                     equations[1].next_to(equations[0], DOWN, buff=0.8)
-                    .set_style(fill_color=BLUE)
+                    
                 ),
         )
         # Under Horizontal loads
@@ -558,7 +581,7 @@ class Shearwall_Systems(Scene):
                 Write(
                     equations[2]
                     .next_to(shearwall_systems2[6], DOWN)
-                    .set_style(fill_color=BLUE)
+                    
                     .shift(RIGHT*3)
                 ),
                 Write(shearwall_systems2[7].next_to(shearwall_systems2[6], DOWN, buff=1.2)),
@@ -571,7 +594,7 @@ class Shearwall_Systems(Scene):
             ReplacementTransform(
                     equations[2].copy(), 
                     equations[3].next_to(equations[2], DOWN, buff=0.8)
-                    .set_style(fill_color=BLUE)
+                    
                 ),
         )
         self.wait()
@@ -593,12 +616,21 @@ class Shearwall_Systems(Scene):
         )
         self.wait()
         # -------------Don't forget to FadeOut the title of chapter before the next scene--------------------
-
+        self.play(
+            Unwrite(shearwall_systems2[12:]),
+            Unwrite(shearwall_systems2[8:12]),
+        )
+        self.wait()
+        self.play(
+            FadeOut(intro_title, shift = UP*2)
+        )
+        self.wait()
 class Problematic(Scene):
     def construct(self):
-        MathTex.set_default(fill_color=BLACK)
-        Rectangle.set_default(stroke_color=BLACK)
+        VMobject.set_default(color=BLACK)
         MarkupText.set_default(color = BLACK)
+        SingleStringMathTex.set_default(color=BLACK)
+        Tex.set_default(color=BLACK)
         self.add(
             ImageMobject("C:/Manim_3_feb/manim/Presentation_PhD/UMKBiskra_Logo.png")
             .set_opacity(0.4)
@@ -612,8 +644,9 @@ class Problematic(Scene):
         ).to_edge(DL, buff=0)
         self.add(my_name)
 
-        intro_title = Title("Problem statment").to_edge(UP, buff=0)
-        self.add(intro_title)
+        prob_title = Title("Problem statment", color = RED).to_edge(UP, buff=0)
+        self.play(Write(prob_title))
+        self.wait()
 
         svg='C:/Manim_3_feb/manim/Presentation_PhD/floor_plan.svg'
         # self.play(DrawBorderThenFill(SVGMobject(svg).scale(1.5)))
@@ -637,7 +670,7 @@ class Problematic(Scene):
             font="Times New Roman",
             justify=1,
             unpack_groups=0,
-        ).scale(0.4)
+        ).scale(0.4).next_to(prob_title, DOWN, buff = 0.5)
         self.play(Write(Problem))
         self.wait()
         self.play(Unwrite(Problem))
@@ -658,15 +691,16 @@ class Problematic(Scene):
             justify=1,
             unpack_groups=0,
             line_spacing = 0.25,
-        ).scale(0.4)
+        ).scale(0.4).next_to(prob_title, DOWN, buff = 0.5)
         
         self.play(Write(Objective))
         self.wait()
         self.play(Unwrite(Objective))
 
         # -------------Don't forget to FadeOut the title of chapter before the next scene--------------------
+        self.play(FadeOut(prob_title, shift = UP*2))
 
-class Bibliography(ZoomedScene):
+class Literature(ZoomedScene):
     def __init__(self, **kwargs):  # HEREFROM
         ZoomedScene.__init__(
             self,
@@ -686,7 +720,7 @@ class Bibliography(ZoomedScene):
         # self.camera.init_background()
         # self.camera.background_color = GREY
         # MathTex.set_default(fill_color=BLACK)
-        # MarkupText.set_default(color = BLACK)
+        MarkupText.set_default(color = BLACK)
         VMobject.set_default(color=BLACK)
         SingleStringMathTex.set_default(color=BLACK)
         Tex.set_default(color=BLACK)
@@ -704,7 +738,7 @@ class Bibliography(ZoomedScene):
         my_name = Text("N. DJAFAR HENNI", font= 'Algerian', font_size=27, color=RED).to_edge(DL, buff=0)
         self.add(my_name)
         self.play(Write(biblio_title))
-        
+        # I should write that researchers have split into 2 groups: one used:
         #----------------------Try-and-error method---------------------#
         Ali_all = MarkupText(
             "1) (Ali et al., 2015) carried out a comparative study by varying "
@@ -778,7 +812,7 @@ class Bibliography(ZoomedScene):
             .scale(0.4)
             .next_to(biblio_title, DOWN, buff=1.5)
         )
-        self.play(LaggedStart(Write(biblio_title), Write(simp_mobj), lag_ratio=1))
+        self.play(Write(simp_mobj))
         self.wait()
 
         simp_title = Text("How SIMP works?", font_size=36, color=RED).to_corner(
@@ -836,7 +870,7 @@ class Bibliography(ZoomedScene):
         shearwall_simp.stretch_to_fit_width(width=rec.width).stretch_to_fit_height(
             rec.height
         ).shift(UP * 0.535)
-        self.add(NumberPlane())
+        # self.add(NumberPlane())
         simp_def_mobj = (
             MarkupText(
                 simp_def,
@@ -915,8 +949,14 @@ class Bibliography(ZoomedScene):
         self.play(
             FadeIn(load, shift=RIGHT * 5),
         )
-
+        # Create iteration effects using valuetracker.
+        v = ValueTracker(0)
+        iteration_label = Tex('Iteration:').next_to(biblio_title, DOWN, buff= 0.35)
+        iteration = always_redraw(lambda: Integer().set_value(v.get_value()).next_to(iteration_label, RIGHT, buff = 0.3))
+        
+        self.add(iteration, iteration_label)
         self.play(
+            v.animate.set_value(10),
             *[
                 i.animate.set_opacity(rd.uniform(0, 1)).set_style(fill_color=BLACK)
                 for i in sq_small_group
@@ -924,24 +964,29 @@ class Bibliography(ZoomedScene):
         )
         # self.wait()
         self.play(
+            v.animate.set_value(20),
             *[
-                i.animate(run_time=3, rate_func=there_and_back)
+                i.animate( rate_func=there_and_back)
                 .set_opacity(rd.uniform(0, 1))
                 .set_style(fill_color=[WHITE])
                 for i in sq_small_group
-            ]
+            ],
+            run_time=3,
         )
         # self.wait()
         self.play(
+            v.animate.set_value(30),
             *[
-                i.animate(run_time=3, rate_func=there_and_back)
+                i.animate( rate_func=there_and_back)
                 .set_opacity(rd.uniform(0.6, 1))
                 .set_style(fill_color=[BLACK])
                 for i in sq_small_group
             ],
             shearwall_simp.animate.set_opacity(0.5),
+            run_time=3,
         )
         self.play(
+            v.animate.set_value(40),
             *[
                 i.animate.set_opacity(0).set_style(fill_color=[BLACK])
                 for i in sq_small_group
@@ -950,7 +995,7 @@ class Bibliography(ZoomedScene):
             run_time=3,
         )
         # Uncreate all objects on the scene except title and my name.
-        to_remove = VGroup(simp_title, simp_def_mobj, simp_def_mobj_2, shear_wall, load, SUPPORT, color_map, sw_label, design_domain)
+        to_remove = VGroup(simp_title, simp_def_mobj, simp_def_mobj_2, shear_wall, load, SUPPORT, color_map, sw_label, design_domain, iteration, iteration_label)
         # shearwall image can't be added to the group. , shearwall_simp
         self.play(Uncreate(to_remove), FadeOut(shearwall_simp), FadeOut(rec))
         
@@ -1003,7 +1048,7 @@ class Bibliography(ZoomedScene):
         self.activate_zooming(
             animate=True
         )  # Add an initial animtaion to activate the zoom.
-        zoomed_camera_text.next_to(self.zoomed_display.display_frame, UP, buff = 0.2) # label
+        zoomed_camera_text.next_to(self.zoomed_display.display_frame, UP, buff = 0.1) # label
         self.play(FadeIn(zoomed_camera_text, shift=UP)) # label
         self.wait()
         self.play(
@@ -1025,7 +1070,7 @@ class Bibliography(ZoomedScene):
         self.wait()
         self.play(AnimationGroup(
             self.zoomed_camera.frame.animate.shift(UP*1.8), # while they are only necessary to resist...
-            self.zoomed_camera.frame.animate.shift(DOWN*0.3),
+            self.zoomed_camera.frame.animate.shift(DOWN*0.5),
             lag_ratio = 1
             )  # Change the dimensions of the frame.
         )
@@ -1040,19 +1085,23 @@ class Bibliography(ZoomedScene):
         #unfold = reveal, uncover
         unfold_camera = UpdateFromFunc(zd_rect, lambda rect: rect.replace(self.zoomed_display))
 
-        self.play(self.get_zoomed_display_pop_out_animation(), unfold_camera, rate_func=lambda t: smooth(1 - t))
+        self.play(Unwrite(zoomed_camera_text), self.get_zoomed_display_pop_out_animation(), unfold_camera, rate_func=lambda t: smooth(1 - t))
         self.play(Uncreate(self.zoomed_display.display_frame), FadeOut(self.zoomed_camera.frame))
         self.wait()
+        self.play(FadeOut(biblio_title, shift = UP*2))
 #----------------------Plan de travail ---------------------#
 class work_plan(Scene):
     def construct(self):
+        VMobject.set_default(color=BLACK)
+        MarkupText.set_default(color = BLACK)
+        SingleStringMathTex.set_default(color=BLACK)
+        Tex.set_default(color=BLACK)
         # Add the needed mobjs to the scene
         self.camera.background_color = WHITE
         # Work plan 'Chapters'
         plan_title = Title("Chapters", color=RED).to_edge(UP, buff=0)
         self.play(Write(plan_title))
 
-        Tex.set_default(color = BLACK)
         plan_list = [
             'I-	A literature review on structures with and without shear wall-frame' 
             'interaction, and different analysis methods (linear and nonlinear).', 
