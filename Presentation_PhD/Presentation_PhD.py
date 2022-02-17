@@ -1,3 +1,4 @@
+from operator import eq
 from manim import *
 import random as rd
 
@@ -260,9 +261,9 @@ class JustifyText(Scene):
         self.play(FadeIn(loads, shift=RIGHT * 7, scale=2))
         self.wait(0.05)
         
-        self.play(
+        self.play( # Frame shear mode
             storey_4.animate( rate_func=there_and_back_with_pause)
-            .apply_function(  # /!\shear walls should not be included in this deformation
+            .apply_function(  
                 # lambda p: p + np.array([np.sqrt(abs(p[1]))*p[1]**2,0, 0]
                 lambda p: p + np.array([np.sin(p[1]), 0, 0])
             )
@@ -336,14 +337,14 @@ class JustifyText(Scene):
         self.play(loads.set_opacity(1).animate.next_to(shearwalls, LEFT, buff=0).shift(UP * 0.58))
         self.wait(0.2)
         
-        self.play(
+        self.play( # Shear wall flexural mode.
             shearwalls.animate(
                 run_time=2, rate_func=there_and_back_with_pause
             )  # (t=0.3, pause_ratio=0.8)
             .apply_function(
                 # lambda p: p + np.array([np.sqrt(abs(p[1]))*p[1]**2,0, 0]
                 lambda p: p
-                + np.array([np.sin(p[1]), 0, 0])
+                + np.array([np.exp(p[1] * 0.5), 0, 0])
             )
             .set_color([RED, YELLOW, RED]),
             Write(
@@ -449,6 +450,18 @@ class JustifyText(Scene):
 
 
         # -------------Don't forget to FadeOut the chapter's title before the next scene--------------------
+        self.play(
+                Unwrite(plus),
+                Unwrite(equal),
+                Unwrite(fr),
+                Unwrite(shw),
+                Uncreate(loads),
+                Unwrite(shw_fr_label),
+                Uncreate(shw_fr_group),
+                Uncreate(sw_frame),
+                FadeOut(intro_title, shift = UP*2)
+        )
+        
 class Shearwall_Systems(Scene):
     def construct(self):
         VMobject.set_default(color=BLACK)
