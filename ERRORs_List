@@ -1,0 +1,57 @@
+#Error1:
+from manim import animation
+from manim.constants import DOWN
+from manim.mobject.svg.brace import BraceBetweenPoints
+
+
+TypeError: object of type 'numpy.float64' has no len()
+# That's because of c2p not found.
+
+#Error2:
+TypeError: unsupported operand type(s) for -: 'list' and 'int'
+#That's because: np.arange([0, 2.1, 0.2]), just remove []
+
+#Error4:
+TypeError: list indices must be integers or slices, not numpy.float64
+#no index like this array[1.2] False, just array[1] index...etc
+
+#Error5:
+AttributeError: 'numpy.ndarray' object has no attribute 'rotate'
+# Brace() only applicable for hz or Verti lines not inclined.
+
+#Error6:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+# This time found in Animation (Create), I put an array inside it, but is False.
+
+#Error7:
+.set(width=0.6)  Can do some problem animations for vertical lines.
+#multiple lines appear.
+#Also, /!\ Stay away from predefined keywords when making functions etc: like color, width....
+#write def func(line_color) instead of color....etc
+
+
+#Error8:
+BraceBetweenPoints(point_1=dL_line.get_end(),point_2=dL_line.get_start()), direction=UP)
+#False: because BraceBetweenPoints has no parameters called UP/DOWN, refer to the definition
+
+# These seem to be the same
+input_to_graph_point = coords_to_point
+#But input_to_graph_point it's easy in case of graphs.
+
+#Error9:
+stroke_color=width,
+    ^
+SyntaxError: keyword argument repeated
+# stroke_color=width, stroke_color=width, 
+#two arguments named the same within the same function
+
+#Error10:
+ValueError: Mobject cannot contain self
+
+#Error11:
+AttributeError: 'int' object has no attribute 'startswith'
+# change fill_color to color
+
+#Error12:
+TypeError: 'int' object is not iterable
+#this what cause the prob list(int)

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)https://towardsdatascience.com/media/1cbf88594d4718663d8991706c290727 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>8610.py – Medium</title><meta name="description" content="Instantly share code, notes, and snippets. You can&#39;t perform that action at this time. You signed in with another tab or window. You signed out in another tab or window. Reload to refresh your session. Reload to refresh your session."><meta name="twitter:widgets:csp" content="on"><meta name="robots" content="noindex"><!--<base target="_blank">--><base href="." target="_blank"><style>body {text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: "ff-tisa-web-pro", Georgia, Cambria, "Times New Roman", Times, serif; font-weight: 400; color: #333332; font-size: 18px; line-height: 1.4; margin: 0; background-color: white; overflow: hidden;}iframe {max-width: 100%;}</style></head><body data-new-gr-c-s-check-loaded="14.1002.0" data-gr-ext-installed=""><style>.gist .gist-file { margin-bottom: 0 !important; }.gist { text-rendering: auto; }</style><script src="./adc3558efdbc76040dca4f63c140dc64.js.download" charset="utf-8"></script><link rel="stylesheet" href="./gist-embed-7b333d2d0df1a43497afe26f66cfc8fe.css"><div id="gist111264791" class="gist">
+    <div class="gist-file" translate="no">
+      <div class="gist-data">
+        <div class="js-gist-file-update-container js-task-list-container file-box">
+  <div id="file-8610-py" class="file my-2">
+    
+  <div itemprop="text" class="Box-body p-0 blob-wrapper data type-python  ">
+
+      
+<div class="js-check-bidi blob-code-content">
+  <template class="js-file-alert-template"></template>
+<template class="js-line-alert-template"></template>
+
+  <table class="highlight tab-size js-file-line-container js-code-nav-container js-tagsearch-file" data-tab-size="8" data-paste-markdown-skip="" data-tagsearch-lang="Python" data-tagsearch-path="8610.py">
+        <tbody><tr>
+          <td id="file-8610-py-L1" class="blob-num js-line-number js-code-nav-line-number" data-line-number="1"></td>
+          <td id="file-8610-py-LC1" class="blob-code blob-code-inner js-file-line"><span class="pl-c1">%</span><span class="pl-c1">%</span><span class="pl-s1">manim</span> <span class="pl-c1">-</span><span class="pl-s1">i</span> <span class="pl-c1">-</span><span class="pl-s1">qh</span> <span class="pl-c1">-</span><span class="pl-s1">o</span> <span class="pl-s1">func_example</span> <span class="pl-v">FunctionExample</span></td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L2" class="blob-num js-line-number js-code-nav-line-number" data-line-number="2"></td>
+          <td id="file-8610-py-LC2" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">numpy</span> <span class="pl-k">as</span> <span class="pl-s1">np</span></td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L3" class="blob-num js-line-number js-code-nav-line-number" data-line-number="3"></td>
+          <td id="file-8610-py-LC3" class="blob-code blob-code-inner js-file-line">
+</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L4" class="blob-num js-line-number js-code-nav-line-number" data-line-number="4"></td>
+          <td id="file-8610-py-LC4" class="blob-code blob-code-inner js-file-line"><span class="pl-k">class</span> <span class="pl-v">FunctionExample</span>(<span class="pl-v">Scene</span>):</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L5" class="blob-num js-line-number js-code-nav-line-number" data-line-number="5"></td>
+          <td id="file-8610-py-LC5" class="blob-code blob-code-inner js-file-line">    <span class="pl-k">def</span> <span class="pl-en">construct</span>(<span class="pl-s1">self</span>):</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L6" class="blob-num js-line-number js-code-nav-line-number" data-line-number="6"></td>
+          <td id="file-8610-py-LC6" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">axes</span> <span class="pl-c1">=</span> <span class="pl-v">Axes</span>(</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L7" class="blob-num js-line-number js-code-nav-line-number" data-line-number="7"></td>
+          <td id="file-8610-py-LC7" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">x_range</span><span class="pl-c1">=</span>[<span class="pl-c1">-</span><span class="pl-c1">5</span>, <span class="pl-c1">5</span>, <span class="pl-c1">.5</span>],</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L8" class="blob-num js-line-number js-code-nav-line-number" data-line-number="8"></td>
+          <td id="file-8610-py-LC8" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">y_range</span><span class="pl-c1">=</span>[<span class="pl-c1">-</span><span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">1</span>],</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L9" class="blob-num js-line-number js-code-nav-line-number" data-line-number="9"></td>
+          <td id="file-8610-py-LC9" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">x_axis_config</span><span class="pl-c1">=</span>{<span class="pl-s">"numbers_to_include"</span>: [<span class="pl-c1">-</span><span class="pl-c1">4</span>, <span class="pl-c1">-</span><span class="pl-c1">3</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>]},</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L10" class="blob-num js-line-number js-code-nav-line-number" data-line-number="10"></td>
+          <td id="file-8610-py-LC10" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">y_axis_config</span><span class="pl-c1">=</span>{<span class="pl-s">"numbers_to_include"</span>: [<span class="pl-c1">-</span><span class="pl-c1">2</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]},</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L11" class="blob-num js-line-number js-code-nav-line-number" data-line-number="11"></td>
+          <td id="file-8610-py-LC11" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">tips</span><span class="pl-c1">=</span><span class="pl-c1">True</span></td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L12" class="blob-num js-line-number js-code-nav-line-number" data-line-number="12"></td>
+          <td id="file-8610-py-LC12" class="blob-code blob-code-inner js-file-line">        )</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L13" class="blob-num js-line-number js-code-nav-line-number" data-line-number="13"></td>
+          <td id="file-8610-py-LC13" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">axes_labels</span><span class="pl-c1">=</span><span class="pl-s1">axes</span>.<span class="pl-en">get_axis_labels</span>()</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L14" class="blob-num js-line-number js-code-nav-line-number" data-line-number="14"></td>
+          <td id="file-8610-py-LC14" class="blob-code blob-code-inner js-file-line">        <span class="pl-c"># Get the graph of a simple functions</span></td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L15" class="blob-num js-line-number js-code-nav-line-number" data-line-number="15"></td>
+          <td id="file-8610-py-LC15" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">graph</span> <span class="pl-c1">=</span> <span class="pl-s1">axes</span>.<span class="pl-en">get_graph</span>(<span class="pl-k">lambda</span> <span class="pl-s1">x</span>: <span class="pl-s1">np</span>.<span class="pl-en">sin</span>(<span class="pl-c1">1</span><span class="pl-c1">/</span><span class="pl-s1">x</span>), <span class="pl-s1">color</span><span class="pl-c1">=</span><span class="pl-v">RED</span>)</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L16" class="blob-num js-line-number js-code-nav-line-number" data-line-number="16"></td>
+          <td id="file-8610-py-LC16" class="blob-code blob-code-inner js-file-line">        <span class="pl-c"># Set up its label</span></td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L17" class="blob-num js-line-number js-code-nav-line-number" data-line-number="17"></td>
+          <td id="file-8610-py-LC17" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">graph_label</span> <span class="pl-c1">=</span> <span class="pl-s1">axes</span>.<span class="pl-en">get_graph_label</span>(</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L18" class="blob-num js-line-number js-code-nav-line-number" data-line-number="18"></td>
+          <td id="file-8610-py-LC18" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">graph</span>, <span class="pl-s1">x_val</span><span class="pl-c1">=</span><span class="pl-c1">1</span>, <span class="pl-s1">direction</span><span class="pl-c1">=</span><span class="pl-c1">2</span> <span class="pl-c1">*</span> <span class="pl-v">UP</span> <span class="pl-c1">+</span> <span class="pl-v">RIGHT</span>,</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L19" class="blob-num js-line-number js-code-nav-line-number" data-line-number="19"></td>
+          <td id="file-8610-py-LC19" class="blob-code blob-code-inner js-file-line">           <span class="pl-s1">label</span><span class="pl-c1">=</span><span class="pl-s">r'f(x) = \sin(\frac{1}{x})'</span>, <span class="pl-s1">color</span><span class="pl-c1">=</span><span class="pl-v">DARK_BLUE</span></td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L20" class="blob-num js-line-number js-code-nav-line-number" data-line-number="20"></td>
+          <td id="file-8610-py-LC20" class="blob-code blob-code-inner js-file-line">        )</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L21" class="blob-num js-line-number js-code-nav-line-number" data-line-number="21"></td>
+          <td id="file-8610-py-LC21" class="blob-code blob-code-inner js-file-line">
+</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L22" class="blob-num js-line-number js-code-nav-line-number" data-line-number="22"></td>
+          <td id="file-8610-py-LC22" class="blob-code blob-code-inner js-file-line">        <span class="pl-c"># Graph the axes components together</span></td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L23" class="blob-num js-line-number js-code-nav-line-number" data-line-number="23"></td>
+          <td id="file-8610-py-LC23" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">axes_group</span> <span class="pl-c1">=</span> <span class="pl-v">VGroup</span>(<span class="pl-s1">axes</span>, <span class="pl-s1">axes_labels</span>)</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L24" class="blob-num js-line-number js-code-nav-line-number" data-line-number="24"></td>
+          <td id="file-8610-py-LC24" class="blob-code blob-code-inner js-file-line">        </td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L25" class="blob-num js-line-number js-code-nav-line-number" data-line-number="25"></td>
+          <td id="file-8610-py-LC25" class="blob-code blob-code-inner js-file-line">        <span class="pl-c"># Animate</span></td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L26" class="blob-num js-line-number js-code-nav-line-number" data-line-number="26"></td>
+          <td id="file-8610-py-LC26" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">self</span>.<span class="pl-en">play</span>(<span class="pl-v">Create</span>(<span class="pl-s1">axes_group</span>), <span class="pl-s1">run_time</span><span class="pl-c1">=</span><span class="pl-c1">2</span>)</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L27" class="blob-num js-line-number js-code-nav-line-number" data-line-number="27"></td>
+          <td id="file-8610-py-LC27" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">self</span>.<span class="pl-en">wait</span>(<span class="pl-c1">0.25</span>)</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L28" class="blob-num js-line-number js-code-nav-line-number" data-line-number="28"></td>
+          <td id="file-8610-py-LC28" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">self</span>.<span class="pl-en">play</span>(<span class="pl-v">Create</span>(<span class="pl-s1">graph</span>), <span class="pl-s1">run_time</span><span class="pl-c1">=</span><span class="pl-c1">3</span>)</td>
+        </tr>
+        <tr>
+          <td id="file-8610-py-L29" class="blob-num js-line-number js-code-nav-line-number" data-line-number="29"></td>
+          <td id="file-8610-py-LC29" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">self</span>.<span class="pl-en">play</span>(<span class="pl-v">Write</span>(<span class="pl-s1">graph_label</span>), <span class="pl-s1">run_time</span><span class="pl-c1">=</span><span class="pl-c1">2</span>)</td>
+        </tr>
+  </tbody></table>
+</div>
+
+
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      <div class="gist-meta">
+        <a href="https://gist.github.com/BexTuychiev/adc3558efdbc76040dca4f63c140dc64/raw/09b1481a233afe0e9145534ab608f095dfd24205/8610.py" style="float:right">view raw</a>
+        <a href="https://gist.github.com/BexTuychiev/adc3558efdbc76040dca4f63c140dc64#file-8610-py">
+          8610.py
+        </a>
+        hosted with ❤ by <a href="https://github.com/">GitHub</a>
+      </div>
+    </div>
+</div>
+<script>var height = -1; var delayMs = 200; if (document) {document.domain = document.domain;}function notifyResize(height) {height = height ? height : document.documentElement.offsetHeight; var resized = false; if (window.donkey && donkey.resize) {donkey.resize(height);var elements = document.getElementsByClassName("gist-data"); for (var i = 0; i < elements.length; i++) {elements[i].style.overflow = "visible"}resized = true;}if (parent && parent._resizeIframe) {var obj = {iframe: window.frameElement, height: height}; parent._resizeIframe(obj); resized = true;}if (window.location && window.location.hash === "#amp=1" && window.parent && window.parent.postMessage) {window.parent.postMessage({sentinel: "amp", type: "embed-size", height: height}, "*");}if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.resize) {window.webkit.messageHandlers.resize.postMessage(height); resized = true;}return resized;}function maybeResize() {try {if (document.documentElement.offsetHeight != height && notifyResize()) {height = document.documentElement.offsetHeight;}delayMs = Math.min(delayMs * 2, 1000000); setTimeout(maybeResize, delayMs);} catch(error) {console.log('maybeResize error: ', error)}}maybeResize();</script><script defer="" src="./v64f9daad31f64f81be21cbef6184a5e31634941392597" integrity="sha512-gV/bogrUTVP2N3IzTDKzgP0Js1gg4fbwtYB6ftgLbKQu/V8yH2+lrKCfKHelh4SO3DPzKj4/glTO+tNJGDnb0A==" data-cf-beacon="{&quot;rayId&quot;:&quot;6bd2baa83e995386&quot;,&quot;token&quot;:&quot;0b5f665943484354a59c39c6833f7078&quot;,&quot;version&quot;:&quot;2021.12.0&quot;,&quot;si&quot;:100}" crossorigin="anonymous"></script>
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
